@@ -12,6 +12,8 @@ const server = express()
   .use(express.static('public'))
   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
+const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'pink']
+let counter = 0;
 // Create the WebSockets server
 const wss = new SocketServer({
   server
@@ -27,6 +29,8 @@ wss.broadcast = function broadcast(data) {
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
+  counter < 5 ? counter++ : counter = 0;
+  ws.color = colors[counter];
   wss.broadcast(JSON.stringify({type: "incomingNotification", id:uuidv1(), content:"New user 'Anonymous' connected.",onlineUsers: wss.clients.size}));
   ws.on('message', function incoming(data) {
     const messageIn = JSON.parse(data)
@@ -37,7 +41,8 @@ wss.on('connection', (ws) => {
             type: "incomingMessage",
             id: uuidv1(),
             username: messageIn.username,
-            content: messageIn.content
+            content: messageIn.content,
+            color: ws.color
           }
           wss.broadcast(JSON.stringify(messageOut))
         break;

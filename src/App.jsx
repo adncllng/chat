@@ -57,7 +57,8 @@ class App extends Component {
           const newMessage = {
             id: messageIn.id,
             username: messageIn.username,
-            content: messageIn.content
+            content: messageIn.content,
+            color: messageIn.color
           };
           const messages = this.state.messages.concat(newMessage)
           this.setState({
@@ -88,7 +89,7 @@ class App extends Component {
 
       <nav className = "navbar" >
       <a href = "/" className = "navbar-brand" > Chatty < /a>
-      <p className = 'navbar-users' >{this.state.usersOnline} users online</p>
+      <p className = 'navbar-users' >{this.state.usersOnline} users online </p>
       </nav>
       <Chatbar currentUser = {this.state.currentUser} postMessage = {this.postMessage} changeUser = {this.changeUser}/>
       <MessageList messages = {this.state.messages}/> </div>

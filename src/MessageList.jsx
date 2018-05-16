@@ -10,7 +10,7 @@ render(){
       )
     }
     return (
-      <Message username={message.username} content={message.content} key={message.id}/>
+      <Message color={message.color} username={message.username} content={message.content} key={message.id}/>
     )
   })
   return (

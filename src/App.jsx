@@ -32,7 +32,6 @@ componentDidMount(){
     const newMessage = {id: messageIn.id, username: messageIn.username, content: messageIn.content};
     const messages = this.state.messages.concat(newMessage)
     this.setState({messages: messages})
-
   }
 }
   render() {

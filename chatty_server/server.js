@@ -31,22 +31,28 @@ wss.broadcast = function broadcast(data) {
 wss.on('connection', (ws) => {
   counter < 5 ? counter++ : counter = 0;
   ws.color = colors[counter];
-  wss.broadcast(JSON.stringify({type: "incomingNotification", id:uuidv1(), content:"New user 'Anonymous' connected.",onlineUsers: wss.clients.size}));
+  wss.broadcast(JSON.stringify({
+    type: "incomingNotification",
+    id: uuidv1(),
+    content: "New user 'Anonymous' connected.",
+    onlineUsers: wss.clients.size
+  }));
+
   ws.on('message', function incoming(data) {
     const messageIn = JSON.parse(data)
 
     switch (messageIn.type) {
-        case "postMessage":
-          const messageOut = {
-            type: "incomingMessage",
-            id: uuidv1(),
-            username: messageIn.username,
-            content: messageIn.content,
-            color: ws.color
-          }
-          wss.broadcast(JSON.stringify(messageOut))
+      case "postMessage":
+        const messageOut = {
+          type: "incomingMessage",
+          id: uuidv1(),
+          username: messageIn.username,
+          content: messageIn.content,
+          color: ws.color
+        }
+        wss.broadcast(JSON.stringify(messageOut))
         break;
-        case "postNotification":
+      case "postNotification":
         // handle incoming notification
         const notificationOut = {
           type: "incomingNotification",
@@ -56,21 +62,19 @@ wss.on('connection', (ws) => {
         }
         wss.broadcast(JSON.stringify(notificationOut))
         break;
-        default:
+      default:
         // show an error in the console if the message type is unknow
     }
-    //
-    // const messageOut = {
-    //   type: "incomingMessage",
-    //   id: uuidv1(),
-    //   username: messageIn.username,
-    //   content: messageIn.content
-    // }
-    // wss.broadcast(JSON.stringify(messageOut))
+
   });
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
-    wss.broadcast(JSON.stringify({type: "incomingNotification", id:uuidv1(), content:"user disconnected",onlineUsers: wss.clients.size}));
+    wss.broadcast(JSON.stringify({
+      type: "incomingNotification",
+      id: uuidv1(),
+      content: "user disconnected",
+      onlineUsers: wss.clients.size
+    }));
     console.log('Client disconnected')
   });
 });

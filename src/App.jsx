@@ -11,8 +11,10 @@ class App extends Component {
       messages: []
     }
     this.onEnter = this.onEnter.bind(this);
+    this.changeUser = this.changeUser.bind(this);
   }
 onEnter(evt) {
+  console.log("helasdf")
     if(evt.key == "Enter"){
       const user = this.state.currentUser.name
          const newMessage = {username: user, content: evt.target.value};
@@ -20,6 +22,9 @@ onEnter(evt) {
          evt.target.value = "";
          this.socket.send(JSON.stringify(newMessage))
    }
+}
+changeUser(evt){
+this.setState({currentUser:{name: evt.target.value}})
 }
 
 componentDidMount(){
@@ -40,7 +45,7 @@ componentDidMount(){
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
-        <Chatbar currentUser={this.state.currentUser} onEnter={this.onEnter} />
+        <Chatbar currentUser={this.state.currentUser} onEnter={this.onEnter} changeUser={this.changeUser}/>
         <MessageList messages={this.state.messages} />
       </div>
     );

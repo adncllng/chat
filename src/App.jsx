@@ -50,7 +50,6 @@ class App extends Component {
     }
     this.socket.onmessage = (event) => {
       const messageIn = JSON.parse(event.data);
-      console.log(messageIn)
       switch (messageIn.type) {
         case "incomingMessage":
           const user = this.state.currentUser.name;
@@ -85,8 +84,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div >
-
+      <div>
       <nav className = "navbar" >
       <a href = "/" className = "navbar-brand" > Chatty < /a>
       <p className = 'navbar-users' >{this.state.usersOnline} users online </p>

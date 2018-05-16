@@ -17,10 +17,7 @@ render(){
     <main className="messages">
      {messages}
     </main>
-
   );
 }
-
 }
-
 export default MessageList;

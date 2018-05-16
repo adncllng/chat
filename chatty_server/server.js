@@ -51,7 +51,8 @@ wss.on('connection', (ws) => {
         const notificationOut = {
           type: "incomingNotification",
           id: uuidv1(),
-          content: messageIn.content
+          content: messageIn.content,
+          onlineUsers: wss.clients.size
         }
         wss.broadcast(JSON.stringify(notificationOut))
         break;

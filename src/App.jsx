@@ -1,53 +1,94 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import Chatbar from './Chatbar.jsx'
 import MessageList from './MessageList.jsx'
-//const exampleSocket = new WebSocket("ws://localhost:3001/", "protocolOne");
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {
+        name: "Anonymous"
+      },
       messages: []
     }
-    this.onEnter = this.onEnter.bind(this);
+    this.postMessage = this.postMessage.bind(this);
     this.changeUser = this.changeUser.bind(this);
   }
-onEnter(evt) {
-  console.log("helasdf")
-    if(evt.key == "Enter"){
+  postMessage(evt) {
+    if (evt.key == "Enter") {
       const user = this.state.currentUser.name
-         const newMessage = {username: user, content: evt.target.value};
-         const messages = this.state.messages.concat(newMessage)
-         evt.target.value = "";
-         this.socket.send(JSON.stringify(newMessage))
-   }
-}
-changeUser(evt){
-this.setState({currentUser:{name: evt.target.value}})
-}
-
-componentDidMount(){
-  this.socket = new WebSocket("ws://localhost:3001/", "protocolOne");
-  this.socket.onopen = (ev) => { console.log('connected')}
-  this.socket.onmessage = (event) => {
-    const messageIn = JSON.parse(event.data);
-    console.log(messageIn);
-    const user = this.state.currentUser.name
-    const newMessage = {id: messageIn.id, username: messageIn.username, content: messageIn.content};
-    const messages = this.state.messages.concat(newMessage)
-    this.setState({messages: messages})
+      const newMessage = {
+        type: "postMessage",
+        username: user,
+        content: evt.target.value
+      };
+      const messages = this.state.messages.concat(newMessage)
+      evt.target.value = "";
+      this.socket.send(JSON.stringify(newMessage))
+    }
+  }
+  changeUser(evt) {
+    if (evt.key == "Enter") {
+      const oldUsername = this.state.currentUser.name;
+      const newUsername = evt.target.value;
+      this.setState({
+        currentUser: {
+          name: newUsername
+        }
+      });
+      const message = {type: "postNotification", content:`${oldUsername} has changed their name to ${newUsername}`}
+      this.socket.send(JSON.stringify(message));
   }
 }
+
+  componentDidMount() {
+    this.socket = new WebSocket("ws://localhost:3001/", "protocolOne");
+    this.socket.onopen = (ev) => {
+      console.log('connected')
+    }
+    this.socket.onmessage = (event) => {
+      const messageIn = JSON.parse(event.data);
+      console.log(messageIn)
+      switch (messageIn.type) {
+        case "incomingMessage":
+          const user = this.state.currentUser.name;
+          const newMessage = {
+            id: messageIn.id,
+            username: messageIn.username,
+            content: messageIn.content
+          };
+          const messages = this.state.messages.concat(newMessage)
+          this.setState({
+            messages: messages
+          })
+          // handle incoming message
+          break;
+        case "incomingNotification":
+          const newNotification = {
+            id: messageIn.id,
+            content: messageIn.content,
+            system: true
+          }
+          const messages1 = this.state.messages.concat(newNotification)
+          this.setState({
+            messages: messages1
+          })
+          break;
+        default:
+          throw new Error("Unknown event type " + messageIn.type);
+      }
+    }
+  }
   render() {
     return (
-      <div>
-        <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
-        </nav>
-        <Chatbar currentUser={this.state.currentUser} onEnter={this.onEnter} changeUser={this.changeUser}/>
-        <MessageList messages={this.state.messages} />
-      </div>
+      <div >
+      <nav className = "navbar" >
+      <a href = "/" className = "navbar-brand" > Chatty < /a>
+      </nav>
+      <Chatbar currentUser = {this.state.currentUser} postMessage = {this.postMessage} changeUser = {this.changeUser}/>
+      <MessageList messages = {this.state.messages}/> </div>
     );
   }
 }

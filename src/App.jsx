@@ -73,7 +73,8 @@ class App extends Component {
           }
           const messages1 = this.state.messages.concat(newNotification)
           this.setState({
-            messages: messages1
+            messages: messages1,
+            usersOnline: messageIn.onlineUsers
           })
           break;
         default:
@@ -84,8 +85,10 @@ class App extends Component {
   render() {
     return (
       <div >
+
       <nav className = "navbar" >
       <a href = "/" className = "navbar-brand" > Chatty < /a>
+      <p className = 'navbar-users' >{this.state.usersOnline} users online</p>
       </nav>
       <Chatbar currentUser = {this.state.currentUser} postMessage = {this.postMessage} changeUser = {this.changeUser}/>
       <MessageList messages = {this.state.messages}/> </div>

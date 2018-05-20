@@ -70,8 +70,8 @@ class App extends Component {
             content: messageIn.content,
             system: true
           }
-          const messages1 = this.state.messages.concat(newNotification)
-          this.setState({messages: messages1, usersOnline: messageIn.onlineUsers})
+          const updatedMessages = {...this.state.messages, newNotification} //this.state.messages.concat(newNotification)
+          this.setState({messages: updatedMessages, usersOnline: messageIn.onlineUsers})
           break;
         default:
           throw new Error("Unknown event type " + messageIn.type);
@@ -83,9 +83,7 @@ class App extends Component {
       <nav className="navbar">
         <a href="/" className="navbar-brand">
           Chatty < /a>
-          <p className='navbar-users'>{this.state.usersOnline}
-            users online
-          </p>
+          <p className='navbar-users'>{this.state.usersOnline} users online </p>
         </nav>
         <Chatbar currentUser={this.state.currentUser} postMessage={this.postMessage} changeUser={this.changeUser}/>
         <MessageList messages={this.state.messages}/>

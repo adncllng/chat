@@ -70,7 +70,7 @@ class App extends Component {
             content: messageIn.content,
             system: true
           }
-          const updatedMessages = {...this.state.messages, newNotification} //this.state.messages.concat(newNotification)
+          const updatedMessages = this.state.messages.concat(newNotification)
           this.setState({messages: updatedMessages, usersOnline: messageIn.onlineUsers})
           break;
         default:

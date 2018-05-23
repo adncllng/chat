@@ -1,8 +1,6 @@
-Chatty App
-=====================
+# Chatty App
 
-A single page app  built with ReactJS, Webpack, Babel, Node.js and Web Sockets. No persistent database is involved; the focus is on the client-side experience
-
+A single page app built with ReactJS, Webpack, Babel, Node.js and Web Sockets. No persistent database is involved; the focus is on the client-side experience
 
 ###Install
 

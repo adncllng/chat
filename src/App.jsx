@@ -11,9 +11,12 @@ class App extends Component {
       },
       messages: []
     };
+    //bind postMessage
     this.postMessage = this.postMessage.bind(this);
+    //bind changeUser
     this.changeUser = this.changeUser.bind(this);
   }
+  //method for posting messages
   postMessage(evt) {
     if (evt.key == "Enter") {
       const user = this.state.currentUser.name;
@@ -22,6 +25,7 @@ class App extends Component {
         username: user,
         content: evt.target.value
       };
+      //concat message and update state
       const messages = this.state.messages.concat(newMessage);
       evt.target.value = "";
       this.socket.send(JSON.stringify(newMessage));

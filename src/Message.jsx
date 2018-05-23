@@ -22,18 +22,13 @@ function Message({ content, username, color }) {
   return (
     <div className="message">
       <span
-      //uses prop 'color' to dynamically change the style
-        style={{
-          color: color
-        }}
-        className="message-username" >
+        className={`message-username ${color}`}>
         {username}
       </span>
       <span className="message-content">
         {contents}
         {"\n"}
-        //uses length and && operator to prevent rendering an empty images array
-        {images.length && images}
+        {images}
       </span>
     </div>
   );

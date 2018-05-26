@@ -49,12 +49,16 @@ class App extends Component {
   }
 
   componentDidMount() {
+    //connect to socket
     this.socket = new WebSocket("ws://localhost:3001/", "protocolOne");
     this.socket.onopen = ev => {
       console.log("connected");
     };
+    // handle incoming events
     this.socket.onmessage = event => {
+
       const messageIn = JSON.parse(event.data);
+
       switch (messageIn.type) {
         case "incomingMessage":
           const user = this.state.currentUser.name;
@@ -66,7 +70,6 @@ class App extends Component {
           };
           const messages = this.state.messages.concat(newMessage);
           this.setState({ messages: messages });
-          // handle incoming message
           break;
         case "incomingNotification":
           const newNotification = {
